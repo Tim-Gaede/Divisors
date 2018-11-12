@@ -118,7 +118,7 @@ function divisors(num::Int, primes::Int)
         divisor = Int64(1)
         i = 1
 
-        while rem > 0
+        while rem != 1
             expo = rem % (powers[i] + 1)
             divisor *= factors[i]^expo
             rem = div( rem, (powers[i] + 1) )
