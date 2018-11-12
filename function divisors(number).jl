@@ -1,5 +1,15 @@
 using Formatting
 
+#=
+This uses divisor candidates from 2 to one less than
+the square-root of the passed number.  If the passed number is
+divisible by this divisor candidate, a pair of divisors is generated
+(the candidate divisor and the quotient) and each member is pushed
+into separate arrays.  The passed number is then checked to see if
+it is a perfect square.  If so, the square-root is added to the first array
+of divisors.  All elements array of quotients are pushed into the other
+array in reverse order to ensure the final returned array is sorted.
+=#
 function divisors(num::Int)
     if num <= 0
         msg = "** divisors() was passed " * string(num) * " **"
@@ -36,8 +46,27 @@ function divisors(num::Int)
 end
 
 
+#=
+     If the number (the original passed number or the number that remains)
+is divisible by a prime less than or equal to the square-root of the
+original number, then the number is continually divided by the prime
+until it is no longer divisible.  This procedure generates the exponent
+of the particular prime factor.
 
+     From the prime factors and their exponents, all divisors are generated.
+For example, the prime factorization of the number, 25920 is:
 
+(2^6) × (3^4)  × (5^1)
+
+Each divisor's prime factorization has a unique combination of exponents.
+The exponent ranges are:
+(0 to 6), (0 to 4), (0 to 1)
+
+Therefore, the number of divisors is
+(7) × (5) × (2) = 70
+A code whose values range from 0 to 69 is used to generate a unique combination
+of exponents and therefore a unique divisor.
+=#
 function divisors(num::Int, primes::Int)
     if num <= 0
         msg = "** divisors() was passed " * string(num) * " **"
@@ -127,6 +156,9 @@ function primesTo(cand_max) # (candidate_max)
     primes
 end
 
+
+
+
 function fibonaccis(max)
     result = Int64[1, 1]
     maxReached = false
@@ -142,6 +174,8 @@ function fibonaccis(max)
 
     result
 end
+
+
 
 
 function main()
