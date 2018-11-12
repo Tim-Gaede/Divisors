@@ -44,7 +44,7 @@ function divisors(num::Int)
     end
 
 
-    return divs
+    divs
 end
 
 
