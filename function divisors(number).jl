@@ -192,6 +192,7 @@ function main()
         println( format(item, commas = true) )
         @time divsOld = divisors(item)
         @time divsNew = divisors(item, primes)
+        println("Same array?: ", divsOld == divsNew)
         println("Num divisors = ", length(divsOld), ", ", length(divsNew))
         println("\r\n"^3)
     end
