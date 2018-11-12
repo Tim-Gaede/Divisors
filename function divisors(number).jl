@@ -135,25 +135,21 @@ end
 
 
 
-function primesTo(cand_max) # (candidate_max)
+function primesTo(lim)
 
     primes = Int64[2]
-    eliminated = falses(cand_max)
+    possis = trues(lim) # possible primes
 
-    sqrtCandMax = convert( Int64, floor(√cand_max + 0.5) )
-    for divisor = 3 : 2 : sqrtCandMax
-        if !eliminated[divisor]
-            for i = 3divisor : 2divisor : cand_max
-                eliminated[i] = true
-            end
+    root = convert( Int64, floor(√lim + 0.5) )
+    for div = 3 : 2 : root
+        if possis[div]
+            for i = 3div : 2div : lim    possis[i] = false  end
         end
     end
 
-
-    for n = 3 : 2 : cand_max
-        if !eliminated[n]    push!(primes, n)  end
+    for n = 3 : 2 : lim
+        if possis[n]    push!(primes, n)  end
     end
-
 
     primes
 end
