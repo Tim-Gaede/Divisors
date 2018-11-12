@@ -69,7 +69,7 @@ of exponents and therefore a unique divisor.
 =#
 function divisors(num::Int, primes::Int)
     if num <= 0
-        msg = "** divisors() was passed " * string(num) * " **"
+        msg = "** divisors(,) was passed " * string(num) * " **"
         throw(DomainError(msg))
     end
 
