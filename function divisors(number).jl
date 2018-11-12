@@ -69,7 +69,7 @@ Therefore, the number of divisors is
 A code whose values range from 0 to 69 is used to generate a unique combination
 of exponents and therefore a unique divisor.
 =#
-function divisors(num::Int, primes::Int)
+function divisors(num::Int, primes)
     if num <= 0
         msg = "** divisors(,) was passed " * string(num) * " **"
         throw(DomainError(msg))
@@ -118,7 +118,7 @@ function divisors(num::Int, primes::Int)
         divisor = Int64(1)
         i = 1
 
-        while rem != 1
+        while rem > 0
             expo = rem % (powers[i] + 1)
             divisor *= factors[i]^expo
             rem = div( rem, (powers[i] + 1) )
