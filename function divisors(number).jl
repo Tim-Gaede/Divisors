@@ -138,16 +138,16 @@ end
 function primesTo(lim)
 
     primes = Int64[2]
-    possis = trues(lim) # possible primes
+    possis = trues(limit) # possible primes
 
-    root = convert( Int64, floor(√lim + 0.5) )
-    for div = 3 : 2 : root
-        if possis[div]
-            for i = 3div : 2div : lim    possis[i] = false  end
+    root = convert( Int64, floor(√limit + 0.5) )
+    for n = 3 : 2 : root # odds only
+        if possis[n]
+            for ñ = 3n : 2n : limit    possis[ñ] = false  end
         end
     end
 
-    for n = 3 : 2 : lim
+    for n = 3 : 2 : limit # odds only
         if possis[n]    push!(primes, n)  end
     end
 
