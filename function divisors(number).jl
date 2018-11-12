@@ -81,7 +81,7 @@ function divisors(num::Int, primes::Int)
     factors = [];    powers = []
 
     root = convert( Int64, floor(√num + 0.5) )
-    if root >= last(primes)    primes = (2root)  end
+    if root >= last(primes)    primes = primesTo(2root)  end
 
     # Break down the number into its prime factors and exponents ---------------
     i = 1;    rem = num # remaining
