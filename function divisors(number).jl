@@ -5,9 +5,11 @@ This uses divisor candidates from 2 to one less than
 the square-root of the passed number.  If the passed number is
 divisible by this divisor candidate, a pair of divisors is generated
 (the candidate divisor and the quotient) and each member is pushed
-into separate arrays.  The passed number is then checked to see if
-it is a perfect square.  If so, the square-root is added to the first array
-of divisors.  All elements array of quotients are pushed into the other
+into separate arrays.  If the passed number is a perfect square, 
+a final divisor is added to the first array, otherwise each member of
+a final divsor pair may be added to each array.
+
+All elements in the array of quotients are pushed into the other
 array in reverse order to ensure the final returned array is sorted.
 =#
 function divisors(num::Int)
