@@ -143,7 +143,7 @@ function primesTo(cand_max) # (candidate_max)
     sqrtCandMax = convert( Int64, floor(√cand_max + 0.5) )
     for divisor = 3 : 2 : sqrtCandMax
         if !eliminated[divisor]
-            for i = 2divisor : divisor : cand_max
+            for i = 3divisor : 2divisor : cand_max
                 eliminated[i] = true
             end
         end
