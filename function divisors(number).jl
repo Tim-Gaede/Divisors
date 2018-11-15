@@ -136,19 +136,23 @@ end
 
 
 function primesTo(lim)
-
+    if lim < 2    return []  end
     primes = Int64[2]
-    possis = trues(limit) # possible primes
+    odds = trues(div(lim + 1, 2))
+    i_max = div(convert(Int64, floor(√lim)), 2)
+    if (2i_max - 1)^2 < lim    i_max += 1  end
 
-    root = convert( Int64, floor(√limit + 0.5) )
-    for n = 3 : 2 : root # odds only
-        if possis[n]
-            for ñ = 3n : 2n : limit    possis[ñ] = false  end
+    for i = 2 : i_max
+        if odds[i]
+            n = 2i - 1
+            for ĩ = i + n : n : length(odds)
+                odds[ĩ] = false
+            end
         end
     end
 
-    for n = 3 : 2 : limit # odds only
-        if possis[n]    push!(primes, n)  end
+    for i = 2 : length(odds)
+        if odds[i]    push!(primes, 2i - 1)  end
     end
 
     primes
