@@ -138,21 +138,22 @@ end
 function primesTo(lim)
     if lim < 2    return []  end
     primes = Int64[2]
-    oddsElim = falses(div(lim + 1, 2))
-    i_max = div(convert(Int64, floor(√lim)), 2)
-    if (2i_max - 1)^2 < lim    i_max += 1  end
+    πLim = convert( Int64, floor( lim / log(lim) ) )
+    sizehint!(primes, πLim)
+    oddsElim = falses(div(lim-1, 2)) # odds except 1
+    i_max = div(convert(Int64, floor(√lim))-1, 2)
 
-    for i = 2 : i_max
+    for i = 1 : i_max
         if !oddsElim[i]
-            n = 2i - 1
+            n = 2i + 1
             for ĩ = i + n : n : length(oddsElim)
                 oddsElim[ĩ] = true
             end
         end
     end
 
-    for i = 2 : length(oddsElim)
-        if !oddsElim[i]    push!(primes, 2i - 1)  end
+    for i = 1 : length(oddsElim)
+        if !oddsElim[i]    push!(primes, 2i + 1)  end
     end
 
     primes
