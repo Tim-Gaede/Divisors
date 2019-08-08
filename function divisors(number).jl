@@ -41,7 +41,7 @@ function divisors!(n::Int, primes::Array{Int,1})
         push!(powers, 1)
     end
  
-    # Use the factors and powers to generate all divisors that may be squared
+    # Use the factors and powers to generate all divisors  
     result = []
     numDivisors = Int64(1)
     for item in powers
@@ -70,7 +70,8 @@ function divisors!(n::Int, primes::Array{Int,1})
 end
 
 
-function divisors2!(n::Int, primes::Array{Int,1})
+
+function divisors_2nd!(n::Int, primes::Array{Int,1})
 # Returns an UNSORTED list of all factors
 # Will extend the array of primes iff it is inadequate for factorization
     if n < 1    throw("n must be a positive integer.")  end
