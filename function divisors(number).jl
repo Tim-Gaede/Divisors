@@ -138,6 +138,7 @@ function primesUpTo(limit::Integer)
 end
 #───────────────────────────────────────────────────────────────────────────────
 
+#-------------------------------------------------------------------------------
 function totalNumDivs!(min, max, primes)
     result = 0
     for num = min : max
@@ -146,7 +147,8 @@ function totalNumDivs!(min, max, primes)
 
     result
 end
-
+#-------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 function totalNumDivs(min, max)
     result = 0
     for num = min : max
@@ -155,7 +157,7 @@ function totalNumDivs(min, max)
 
     result
 end
-
+#-------------------------------------------------------------------------------
 
 #═══════════════════════════════════════════════════════════════════════════════
 function main()
@@ -182,8 +184,6 @@ function main()
     @time tot_brute = totalNumDivs(num_min, num_max)
     println(tot_brute, " total divisors for the brute force function.")
     println("\n"^3, "Done!")
-
-
 end
 #═══════════════════════════════════════════════════════════════════════════════
 main()
