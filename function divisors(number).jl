@@ -43,14 +43,14 @@ function divisors!(n::Int, primes::Array{Int,1})
     end
 
     # Use the factors and powers to generate all divisors
-    result = Int64[]
     numDivisors = Int64(1)
     for item in powers
         numDivisors *= (item + 1)
     end
 
-    codeMax = numDivisors - 1
-    for code = 0 : codeMax
+    result = Int64[1] # 1 is always a divisor
+    codeMax = numDivisors - 2
+    for code = 1 : codeMax
         rem = code
         divisor = Int64(1)
         i = 1
@@ -64,6 +64,7 @@ function divisors!(n::Int, primes::Array{Int,1})
 
         push!(result, divisor)
     end
+    push!(result, n) # n is always a divisor
 
 
 
@@ -118,11 +119,15 @@ function main()
     primes = primesUpTo(10^8)
     println("Primes generated.\n\n")
     println("\n"^6)
-    n = rand(10^7 : last(primes))
-    println("Divisors for $n:\n\n")
-    divs_sorted = sort(divisors!(n, primes))
-    num_figs = convert(Int64, floor(log10(last(divs_sorted)))) + 1
-    for div in divs_sorted;    println(lpad(div, num_figs)); end
+
+    n = rand(10^7 : last(primes)) 
+    divs = sort(divisors!(n, primes))
+    println("There are ", length(divs), " divisors for $n:\n\n")
+
+    num_figs = convert(Int64, floor(log10(last(divs)))) + 1
+
+    sort!(divs)
+    for div in divs;    println(lpad(div, num_figs)); end
 end
 #═══════════════════════════════════════════════════════════════════════════════
 main()
