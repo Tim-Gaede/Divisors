@@ -1,2 +1,2 @@
 # Divisors
-Two Julia functions that return an array of divisors for an integer. 
+Function that returns an array of divisors for an integer. 
