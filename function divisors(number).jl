@@ -72,7 +72,33 @@ function divisors!(n::Int, primes::Array{Int,1})
 end
 #───────────────────────────────────────────────────────────────────────────────
 
+#-------------------------------------------------------------------------------
+# This function is slower for large numbers but has pedagogical value
+# as it is easier to understand.
+function divisors(n::Int)    
+    if n < 1;    throw("n must be an integer at least 1.") end;
+    result = Int64[1]
+    if n == 1;    return result; end
 
+    sqrt_rounded_down = convert(Int64, floor(√n))
+    div_cand_max = sqrt_rounded_down
+    if sqrt_rounded_down^2 == n
+        push!(result, sqrt_rounded_down);
+        div_cand_max -= 1
+    end
+
+    for div_cand = 2 : div_cand_max
+        if n % div_cand == 0
+            push!(result, div_cand)
+            push!(result, n ÷ div_cand)
+        end
+    end
+
+    push!(result, n)
+
+    result
+end
+#-------------------------------------------------------------------------------
 
 #───────────────────────────────────────────────────────────────────────────────
 function primesUpTo(limit::Integer)
@@ -112,15 +138,33 @@ function primesUpTo(limit::Integer)
 end
 #───────────────────────────────────────────────────────────────────────────────
 
+function totalNumDivs!(min, max, primes)
+    result = 0
+    for num = min : max
+        result += length(divisors!(num, primes))
+    end
+
+    result
+end
+
+function totalNumDivs(min, max)
+    result = 0
+    for num = min : max
+        result += length(divisors(num))
+    end
+
+    result
+end
+
 
 #═══════════════════════════════════════════════════════════════════════════════
 function main()
-    println("\n\nGenerating primes\n")
+    println("\n", "─"^40, "\n")
+    println("Generating primes\n")
     primes = primesUpTo(10^8)
-    println("Primes generated.\n\n")
-    println("\n"^6)
+    println("Primes generated.\n\n\n")
 
-    n = rand(10^7 : last(primes)) 
+    n = rand(10^7 : last(primes))
     divs = sort(divisors!(n, primes))
     println("There are ", length(divs), " divisors for $n:\n\n")
 
@@ -128,6 +172,18 @@ function main()
 
     sort!(divs)
     for div in divs;    println(lpad(div, num_figs)); end
+
+    num_min = 10_000_000
+    num_max = num_min + 250_000
+    println("\n\nTesting long function...")
+    @time tot = totalNumDivs!(num_min, num_max, primes)
+    println(tot, " total divisors for the long function...")
+    println("\n\nTesting brute force function...")
+    @time tot_brute = totalNumDivs(num_min, num_max)
+    println(tot_brute, " total divisors for the brute force function.")
+    println("\n"^3, "Done!")
+
+
 end
 #═══════════════════════════════════════════════════════════════════════════════
 main()
