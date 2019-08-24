@@ -1,5 +1,3 @@
-
-
 function divisors!(n::Int, primes::Array{Int,1})
 # Returns an UNSORTED list of all factors
 # Will extend the array of primes iff it is inadequate for factorization
