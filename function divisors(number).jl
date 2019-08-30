@@ -4,11 +4,11 @@
 function divisors!(n::Int, primes::Array{Int,1})
 # Returns an UNSORTED list of all factors
 # Will extend the array of primes iff it is inadequate for factorization
-    if n < 1    throw("n must be a positive integer.")  end
-    if n == 1  return [1]  end
+    if n  < 1;    throw("n must be a positive integer."); end
+    if n == 1;    return [1]; end
 
-    factors = Int64[]
-    powers  = Int64[]
+    factors = []
+    powers = []
 
 
     sqrt_n = convert(Int64, floor(√n + 0.5))
@@ -21,9 +21,9 @@ function divisors!(n::Int, primes::Array{Int,1})
     end
 
     rem = n
-    root_rem = convert(Int64, floor(√rem + 0.5))
+    root = convert(Int64, floor(√rem + 0.5))
     i = 1
-    while rem ≠ 1    &&    primes[i] ≤ root_rem
+    while rem ≠ 1    &&    primes[i] ≤ root
         if rem % primes[i] == 0
 
             push!(factors, primes[i])
@@ -33,7 +33,7 @@ function divisors!(n::Int, primes::Array{Int,1})
                 power += 1
             end
             push!(powers, power)
-            root_rem = convert(Int64, floor(√rem + 0.5))
+            root = convert(Int64, floor(√rem + 0.5))
         end
         i += 1
     end
@@ -43,14 +43,14 @@ function divisors!(n::Int, primes::Array{Int,1})
     end
 
     # Use the factors and powers to generate all divisors
+    result = []
     numDivisors = Int64(1)
     for item in powers
         numDivisors *= (item + 1)
     end
 
-    result = Int64[1] # 1 is always a divisor
-    codeMax = numDivisors - 2
-    for code = 1 : codeMax
+    codeMax = numDivisors - 1
+    for code = 0 : codeMax
         rem = code
         divisor = Int64(1)
         i = 1
@@ -64,37 +64,8 @@ function divisors!(n::Int, primes::Array{Int,1})
 
         push!(result, divisor)
     end
-    push!(result, n) # n is always a divisor
 
 
-
-    result
-end
-#───────────────────────────────────────────────────────────────────────────────
-
-#-------------------------------------------------------------------------------
-# This function is slower for large numbers but has pedagogical value
-# as it is easier to understand.
-function divisors(n::Int)    
-    if n < 1;    throw("n must be an integer at least 1.") end;
-    result = Int64[1]
-    if n == 1;    return result; end
-
-    sqrt_rounded_down = convert(Int64, floor(√n))
-    div_cand_max = sqrt_rounded_down
-    if sqrt_rounded_down^2 == n
-        push!(result, sqrt_rounded_down);
-        div_cand_max -= 1
-    end
-
-    for div_cand = 2 : div_cand_max
-        if n % div_cand == 0
-            push!(result, div_cand)
-            push!(result, n ÷ div_cand)
-        end
-    end
-
-    push!(result, n)
 
     result
 end
