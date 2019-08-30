@@ -11,7 +11,7 @@ function divisors!(n::Int, primes::Array{Int,1})
     powers = []
 
 
-    sqrt_n = convert(Int64, floor(√n + 0.5))
+    sqrt_n = convert(Int64, floor(√n))
     if sqrt_n ≥ last(primes)
         primesNew = primesUpTo(2sqrt_n)
         len = length(primes)
