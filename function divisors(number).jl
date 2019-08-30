@@ -4,7 +4,7 @@
 function divisors!(n::Int, primes::Array{Int,1})
 # Returns an UNSORTED list of all factors
 # Will extend the array of primes iff it is inadequate for factorization
-    if n  < 1;    throw("n must be a positive integer."); end
+    if n  < 1;    throw("n must be greater than zero."); end
     if n == 1;    return [1]; end
 
     factors = []
