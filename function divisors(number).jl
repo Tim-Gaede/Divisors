@@ -1,7 +1,7 @@
 #───────────────────────────────────────────────────────────────────────────────
 function divisors!(n::Int, primes::Array{Int,1})
-# Returns a sorted list of all divisors of n.
-# Will extend the array of primes IFF inadequate for factorization
+# Returns an unsorted sorted list of all divisors of n.
+# Will extend the array of primes if possibly inadequate for factorization
     if n  < 1;    throw("n must be greater than zero."); end
     if n == 1;    return [1]; end
 
@@ -9,7 +9,7 @@ function divisors!(n::Int, primes::Array{Int,1})
     factors = Int64[]
     pwrs  = Int64[]
 
-    # If the array of primes is inadequate,
+    # If the array of primes may be inadequate,
     # extend it to double the adequate length.
     sqrt_n = convert(Int64, floor(√n))
     if sqrt_n > last(primes)
@@ -20,8 +20,9 @@ function divisors!(n::Int, primes::Array{Int,1})
     end
 
     rem = n
+    sqrt_rem = sqrt_n
     i = 1
-    while rem ≠ 1    &&    primes[i] ≤ sqrt_n
+    while rem ≠ 1    &&    primes[i] ≤ sqrt_rem
         if rem % primes[i] == 0
 
             push!(factors, primes[i])
@@ -32,6 +33,7 @@ function divisors!(n::Int, primes::Array{Int,1})
             end
             push!(pwrs, pwr)
         end
+        sqrt_rem = convert(Int64, floor(√rem)) # Speed up or slow down?
         i += 1
     end
     if rem ≠ 1
@@ -62,7 +64,6 @@ function divisors!(n::Int, primes::Array{Int,1})
         push!(res, dvr)
     end
     push!(res, n) # n is always a divisor
-
 
 
     sort(res) #<≡≡≡≡≡≡≡≡ Modify if you don't need the divisors sorted !!!!!!!!!!
@@ -108,3 +109,4 @@ function main()
 end
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 main()
+
