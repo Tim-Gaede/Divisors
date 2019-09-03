@@ -11,7 +11,7 @@ function divisors!(n::Int, primes::Array{Int,1})
 
     # If the array of primes may be inadequate,
     # extend it to double the adequate length.
-    sqrt_n = convert(Int64, floor(√n))
+    sqrt_n = convert(Int64, ceil(√n))
     if sqrt_n > last(primes)
         primes′ = primesTo(2sqrt_n)
         for i = length(primes) + 1 : length(primes′)
@@ -102,11 +102,12 @@ end
 function main()
     println("\n", "-"^40, "\n"^2)
     N = 5040
-    primes = primesTo(3)
+    primes = primesTo(2)
     println("Initial list of primes:\n\n$primes", "\n"^4)
-    println("Divisors of $N:\n\n", divisors!(5040, primes), "\n"^4)
-    println("Final list of primes:\n\n$primes", "\n"^4)
+    dvrs = divisors!(N, primes)
+    println("There are ", length(dvrs), " divisors of $N:\n")
+    println(dvrs, "\n"^4)
+    println("Final list of primes:\n\n$primes")
 end
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 main()
-
