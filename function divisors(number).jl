@@ -9,8 +9,7 @@ function divisors!(n::Int, primes::Array{Int,1})
     factors = Int64[]
     pwrs  = Int64[]
 
-    # If the array of primes may be inadequate,
-    # extend it to double the adequate length.
+    # Extend the array of primes if it may be inadequate
     sqrt_n_up = convert(Int64, ceil(√n))
     if sqrt_n_up > last(primes)
         primes′ = primesTo(2sqrt_n_up)
