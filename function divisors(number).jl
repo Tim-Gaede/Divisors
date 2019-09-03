@@ -1,84 +1,88 @@
-# Timothy Gaede
-# TimGaede@gmail.com
 #───────────────────────────────────────────────────────────────────────────────
 function divisors!(n::Int, primes::Array{Int,1})
-# Returns an UNSORTED list of all factors
-# Will extend the array of primes iff it is inadequate for factorization
+# Returns a sorted list of all divisors of n.
+# Will extend the array of primes IFF inadequate for factorization
     if n  < 1;    throw("n must be greater than zero."); end
     if n == 1;    return [1]; end
 
-    factors = []
-    powers = []
 
+    factors = Int64[]
+    pwrs  = Int64[]
 
+    # If the array of primes is inadequate,
+    # extend it to double the adequate length.
     sqrt_n = convert(Int64, floor(√n))
     if sqrt_n ≥ last(primes)
-        primesNew = primesUpTo(2sqrt_n)
-        len = length(primes)
-        for i = len + 1 : length(primesNew)
-            push!(primes, primesNew[i])
+        primes′ = primesTo(2sqrt_n) 
+        for i = length(primes) + 1 : length(primes′)
+            push!(primes, primes′[i])
         end
     end
 
     rem = n
-    root = convert(Int64, floor(√rem + 0.5))
+    sqrt_rem = convert(Int64, floor(√rem))
     i = 1
-    while rem ≠ 1    &&    primes[i] ≤ root
+    while rem ≠ 1    &&    primes[i] ≤ sqrt_rem
         if rem % primes[i] == 0
 
             push!(factors, primes[i])
-            power = 0
+            pwr = 0
             while rem % primes[i] == 0
                 rem ÷= primes[i]
-                power += 1
+                pwr += 1
             end
-            push!(powers, power)
-            root = convert(Int64, floor(√rem + 0.5))
+            push!(pwrs, pwr)
+            sqrt_rem = convert(Int64, floor(√rem))
         end
         i += 1
     end
     if rem ≠ 1
         push!(factors, rem)
-        push!(powers, 1)
+        push!(pwrs, 1)
     end
 
-    # Use the factors and powers to generate all divisors
-    result = []
-    numDivisors = Int64(1)
-    for item in powers
-        numDivisors *= (item + 1)
+    # Use the factors and pwrs to generate all divisors
+    numDvrs = Int64(1)
+    for pwr in pwrs
+        numDvrs *= (pwr + 1)
     end
 
-    codeMax = numDivisors - 1
-    for code = 0 : codeMax
+    res = Int64[1] # 1 is always a divisor
+    codeMax = numDvrs - 2
+    for code = 1 : codeMax
         rem = code
-        divisor = Int64(1)
+        dvr = Int64(1)
         i = 1
 
         while rem > 0
-            exponent = rem % (powers[i] + 1)
-            divisor *= factors[i]^exponent
-            rem ÷= (powers[i] + 1)
+            pwr = rem % (pwrs[i] + 1)
+            dvr *= factors[i]^pwr
+            rem ÷= (pwrs[i] + 1)
             i += 1
         end
 
-        push!(result, divisor)
+        push!(res, dvr)
     end
+    push!(res, n) # n is always a divisor
 
 
 
-    result
+    sort(res) #<≡≡≡≡≡≡≡≡ Modify if you don't need the divsors sorted !!!!!!!!!!!
 end
-#-------------------------------------------------------------------------------
-
 #───────────────────────────────────────────────────────────────────────────────
-function primesUpTo(lim::Integer)
-    if lim < 2;    return []; end
-    primes = Int64[2]
-    sizehint!(primes, convert( Int64, floor( lim / log(lim) ) ))
-    oddsAlive = trues((lim-1) ÷ 2) # oddsAlive[i] represents 2i + 1
 
-    i_sqrt = (convert( Int64, floor(√lim) ) - 1) ÷ 2
+
+#-------------------------------------------------------------------------------
+# Implementation of the Sieve of Eratosthenes where we take advantage of
+# the option to iterate a for loop by more than 1.  Multiplying two numbers to
+# get an odd would imply that both of those numbers were also odd.
+function primesTo(n::Integer)
+    if n < 2;    return []; end
+    primes = Int64[2]
+    sizehint!(primes, convert( Int64, floor( n / log(n) ) ))
+    oddsAlive = trues((n-1) ÷ 2) # oddsAlive[i] represents 2i + 1
+
+    i_sqrt = (convert( Int64, floor(√n) ) - 1) ÷ 2
     for i = 1 : i_sqrt
         if oddsAlive[i] # It's prime.  Kill odd multiples of it
             push!(primes, 2i + 1)
@@ -86,61 +90,23 @@ function primesUpTo(lim::Integer)
             for iₓ = i+Δᵢ : Δᵢ : length(oddsAlive);   oddsAlive[iₓ] = false; end
         end
     end
-    for i = i_sqrt + 1 : length(oddsAlive) # Remaining living odds also prime
+    for i = i_sqrt + 1 : length(oddsAlive) # Surviving odds also prime
         if oddsAlive[i];    push!(primes, 2i + 1); end
     end
 
     primes
 end
-
-#───────────────────────────────────────────────────────────────────────────────
-
-#-------------------------------------------------------------------------------
-function totalNumDivs!(min, max, primes)
-    result = 0
-    for num = min : max
-        result += length(divisors!(num, primes))
-    end
-
-    result
-end
-#-------------------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-function totalNumDivs(min, max)
-    result = 0
-    for num = min : max
-        result += length(divisors(num))
-    end
-
-    result
-end
 #-------------------------------------------------------------------------------
 
-#═══════════════════════════════════════════════════════════════════════════════
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 function main()
-    println("\n", "─"^40, "\n")
-    println("Generating primes\n")
-    primes = primesUpTo(10^8)
-    println("Primes generated.\n\n\n")
-
-    n = rand(10^7 : last(primes))
-    divs = sort(divisors!(n, primes))
-    println("There are ", length(divs), " divisors for $n:\n\n")
-
-    num_figs = convert(Int64, floor(log10(last(divs)))) + 1
-
-    sort!(divs)
-    for div in divs;    println(lpad(div, num_figs)); end
-
-    num_min = 10_000_000
-    num_max = num_min + 250_000
-    println("\n\nTesting long function...")
-    @time tot = totalNumDivs!(num_min, num_max, primes)
-    println(tot, " total divisors for the long function...")
-    println("\n\nTesting brute force function...")
-    @time tot_brute = totalNumDivs(num_min, num_max)
-    println(tot_brute, " total divisors for the brute force function.")
-    println("\n"^3, "Done!")
+    println("\n", "-"^40, "\n"^2)
+    N = 5040
+    primes = primesTo(3)
+    println("Initial list of primes:\n\n$primes", "\n"^4)
+    println("Divisors of $N:\n\n", divisors!(5040, primes), "\n"^4)
+    println("Final list of primes:\n\n$primes", "\n"^4)
 end
-#═══════════════════════════════════════════════════════════════════════════════
-main() 
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+main()
