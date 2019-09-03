@@ -11,18 +11,18 @@ function divisors!(n::Int, primes::Array{Int,1})
 
     # If the array of primes may be inadequate,
     # extend it to double the adequate length.
-    sqrt_n = convert(Int64, ceil(√n))
-    if sqrt_n > last(primes)
-        primes′ = primesTo(2sqrt_n)
+    sqrt_n_up = convert(Int64, ceil(√n))
+    if sqrt_n_up > last(primes)
+        primes′ = primesTo(2sqrt_n_up)
         for i = length(primes) + 1 : length(primes′)
             push!(primes, primes′[i])
         end
     end
 
     rem = n
-    sqrt_rem = sqrt_n
+    sqrt_rem_down = convert(Int64, floor(√rem))
     i = 1
-    while rem ≠ 1    &&    primes[i] ≤ sqrt_rem
+    while rem ≠ 1    &&    primes[i] ≤ sqrt_rem_down
         if rem % primes[i] == 0
 
             push!(factors, primes[i])
@@ -33,7 +33,7 @@ function divisors!(n::Int, primes::Array{Int,1})
             end
             push!(pwrs, pwr)
         end
-        sqrt_rem = convert(Int64, floor(√rem)) # Speed up or slow down?
+        sqrt_rem_down = convert(Int64, floor(√rem)) # Speed up or slow down?
         i += 1
     end
     if rem ≠ 1
@@ -111,3 +111,4 @@ function main()
 end
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 main()
+
