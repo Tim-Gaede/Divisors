@@ -67,7 +67,7 @@ function divisors!(n::Int, primes::Array{Int,1})
 
 
 
-    sort(res) #<≡≡≡≡≡≡≡≡ Modify if you don't need the divsors sorted !!!!!!!!!!!
+    sort(res) #<≡≡≡≡≡≡≡≡ Modify if you don't need the divisors sorted !!!!!!!!!!!
 end
 #───────────────────────────────────────────────────────────────────────────────
 
