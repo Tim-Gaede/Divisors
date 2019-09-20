@@ -49,10 +49,17 @@ function divisors!(n::Int, primes::Array{Int,1})
     res = Int64[1] # 1 is always a divisor
     codeMax = numDvrs - 2
     for code = 1 : codeMax
+        
+        # Treat "code" as a mixed base number
+        # whose number of digits is the  
+        # number of prime factors.
+        # The base of each digit is the 
+        # corresponding prime factor's 
+        # power plus one.
         rem = code
         dvr = Int64(1)
         i = 1
-
+       
         while rem > 0
             pwr = rem % (pwrs[i] + 1)
             dvr *= factors[i]^pwr
