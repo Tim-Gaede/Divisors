@@ -23,9 +23,9 @@ function divisors!(n::Int, primes::Array{Int,1})
     i = 1
     while rem ≠ 1  &&  primes[i] ≤ sqrt_rem_down
         if rem % primes[i] == 0
-
             push!(factors, primes[i])
-            pwr = 0
+            rem ÷= primes[i]
+            pwr = 1
             while rem % primes[i] == 0
                 rem ÷= primes[i]
                 pwr += 1
