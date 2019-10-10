@@ -21,7 +21,7 @@ function divisors!(n::Int, primes::Array{Int,1})
     rem = n
     sqrt_rem_down = convert(Int64, floor(√rem))
     i = 1
-    while rem ≠ 1    &&    primes[i] ≤ sqrt_rem_down
+    while rem ≠ 1  &&  primes[i] ≤ sqrt_rem_down
         if rem % primes[i] == 0
 
             push!(factors, primes[i])
