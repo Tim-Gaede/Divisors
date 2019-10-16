@@ -1,69 +1,67 @@
 #───────────────────────────────────────────────────────────────────────────────
 function divisors!(n::Int, primes::Array{Int,1})
-# Returns a sorted list of all divisors of n.
-# Will extend the array of primes if possibly inadequate for factorization
-    if n  < 1;    throw("n must be greater than zero."); end
-    if n == 1;    return [1]; end
+    # Returns a sorted list of all divisors of n.
+    # Will extend the array of primes if possibly inadequate for factorization
+        if n  < 1;    throw(DomainError("n must be greater than zero."));    end
+        if n == 1;    return []; end
 
 
-    factors = Int64[]
-    pwrs  = Int64[]
+        fctrs_pwrs = []
 
-    # Extend the array of primes if it may be inadequate
-    sqrt_n_up = convert(Int64, ceil(√n))
-    if sqrt_n_up > last(primes)
-        primes′ = primesTo(2sqrt_n_up)
-        for i = length(primes) + 1 : length(primes′)
-            push!(primes, primes′[i])
-        end
-    end
-
-    rem = n
-    sqrt_rem_down = convert(Int64, floor(√rem))
-    i = 1
-    while rem ≠ 1  &&  primes[i] ≤ sqrt_rem_down
-        if rem % primes[i] == 0
-            push!(factors, primes[i])
-            rem ÷= primes[i]
-            pwr = 1
-            while rem % primes[i] == 0
-                rem ÷= primes[i]
-                pwr += 1
+        # Extend the array of primes if it may be inadequate
+        sqrt_n_up = convert(Int64, ceil(√n))
+        if length(primes) ==  0  ||  sqrt_n_up > last(primes)
+            primes′ = primesTo(2sqrt_n_up)
+            for i = length(primes) + 1 : length(primes′)
+                push!(primes, primes′[i])
             end
-            push!(pwrs, pwr)
         end
-        sqrt_rem_down = convert(Int64, floor(√rem)) # Speed up or slow down?
-        i += 1
-    end
-    if rem ≠ 1
-        push!(factors, rem)
-        push!(pwrs, 1)
-    end
+
+        rem = n
+        sqrt_rem_down = convert(Int64, floor(√rem))
+        i = 1
+        while rem ≠ 1  &&  primes[i] ≤ sqrt_rem_down
+            if rem % primes[i] == 0
+                rem ÷= primes[i]
+                pwr = 1
+                while rem % primes[i] == 0
+                    rem ÷= primes[i]
+                    pwr += 1
+                end
+                push!(fctrs_pwrs, [primes[i], pwr])
+            end
+            sqrt_rem_down = convert(Int64, floor(√rem)) # Speed up or slow down?
+            i += 1
+        end
+
+        if rem ≠ 1;    push!(fctrs_pwrs, [rem, 1]);    end
+
+
 
     # Use the factors and pwrs to generate all divisors
     numDvrs = Int64(1)
-    for pwr in pwrs
-        numDvrs *= (pwr + 1)
+    for pair in fctrs_pwrs
+        numDvrs *= (pair[2] + 1)
     end
 
     res = Int64[1] # 1 is always a divisor
     codeMax = numDvrs - 2
     for code = 1 : codeMax
-        
+
         # Treat "code" as a mixed base number
-        # whose number of digits is the  
+        # whose number of digits is the
         # number of prime factors.
-        # The base of each digit is the 
-        # corresponding prime factor's 
+        # The base of each digit is the
+        # corresponding prime factor's
         # power plus one.
         rem = code
         dvr = Int64(1)
         i = 1
-       
+
         while rem > 0
-            pwr = rem % (pwrs[i] + 1)
-            dvr *= factors[i]^pwr
-            rem ÷= (pwrs[i] + 1)
+            pwr = rem % (fctrs_pwrs[i][2] + 1)
+            dvr *= fctrs_pwrs[i][1]^pwr
+            rem ÷= (fctrs_pwrs[i][2] + 1)
             i += 1
         end
 
@@ -108,7 +106,7 @@ end
 function main()
     println("\n", "-"^40, "\n"^2)
     N = 5040
-    primes = primesTo(2)
+    primes = Int[]
     println("Initial list of primes:\n\n$primes", "\n"^4)
     dvrs = divisors!(N, primes)
     println("There are ", length(dvrs), " divisors of $N:\n")
@@ -117,4 +115,3 @@ function main()
 end
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 main()
-
