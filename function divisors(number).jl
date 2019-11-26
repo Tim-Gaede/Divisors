@@ -30,7 +30,7 @@ function divisors!(n::Int, primes::Array{Int,1})
                 end
                 push!(fctrs_pwrs, [primes[i], pwr])
             end
-            sqrt_rem_down = convert(Int64, floor(√rem)) # Speed up or slow down?
+            sqrt_rem_down = convert(Int64, floor(√rem))
             i += 1
         end
 
